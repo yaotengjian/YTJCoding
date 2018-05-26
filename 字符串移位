@@ -1,0 +1,29 @@
+//字符串右移位
+#include <stdio.h>
+#include <string.h>
+void RightLoopMove(char* pstr, unsigned short steps)
+{
+	//assert(pstr != NULL);
+	int len = strlen(pstr);
+	while (steps--)
+	{
+		char temp = pstr[len - 1];
+		//先取出最后一位
+		int i = 0;
+		for (i = len - 2; i >= 0; i--)
+		{
+			pstr[i + 1] = pstr[i];
+			//依次往后移
+		}
+		pstr[0] = temp;
+		//把最后一位给第一位
+	}
+}
+int main()
+{
+	char a[] = "abcdefghi";
+	RightLoopMove(a, 2);
+	printf("%s\n", a);
+	system("pause");
+	return 0;
+}
