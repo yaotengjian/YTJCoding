@@ -1,0 +1,28 @@
+
+//字符串到整数的转换
+#include <stdio.h>
+int ascii_to_integer(char *str)
+{
+	int sum = 0;
+	while (*str != '\0')
+	{
+		if (*str >= '0' && *str <= '9') 
+		{
+			sum = sum * 10 + (*str - '0');
+			*str++;
+		}
+		else
+	return 0;
+	}
+	return sum;
+         }
+int main()
+{
+	char *p = "123456";
+	int ret;
+	ret = ascii_to_integer(p);
+	printf("%d\n", ret);
+	system("pause");
+	return 0;
+}
+
