@@ -1,0 +1,31 @@
+
+//模拟实现strncat函数
+#include<stdio.h>
+#include<string.h>
+#include<assert.h>
+char* my_strncat(char *dest, const char *src, int n)
+{
+	char *p = dest;
+	assert(dest != NULL);
+	assert(src != NULL);
+	while (*dest != '\0')
+	{
+		*dest++;
+	}
+	while (n&& *src)
+	{
+		*dest++ = *src++;
+		n--;
+	}
+	*dest = '\0';
+	return p;
+}
+int main()
+{
+	char arr[20] = "hello  ";
+	int len = strlen(arr);
+	char *ret = my_strncat(arr, arr, len);
+	printf("%s", ret);
+	system("pause");
+	return 0;
+}
