@@ -1,0 +1,30 @@
+模拟实现strncpy函数
+#include<stdio.h>
+#include<string.h>
+#include<assert.h>
+char* my_strncpy(char *dest, const char *src, int n)
+{
+	char *p = dest;
+	assert(dest != NULL);
+	assert(src != NULL);
+	while (n && (*dest++ = *src++))
+	{
+		n--;
+	}
+	if (n > 0)
+	{
+		while (--n)
+		{
+			*dest++ = '\0';
+		}	
+	}
+	return p;
+}
+int main()
+{
+	char arr[50] = { 0 };
+	int len = strlen("hello bit");
+	printf("arr = %s\n", my_strncpy(arr,"hello bit", len));
+	system("pause");
+	return 0;
+}
