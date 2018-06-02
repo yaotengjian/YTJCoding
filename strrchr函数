@@ -1,0 +1,27 @@
+/#include<stdio.h>  
+//#include<stdlib.h>  
+//#include<string.h>  
+//#include<assert.h>   
+//char*my_strrchr(char*str, char ch, int len)
+//{
+//	str = str + len - 1;
+//	assert(str);
+//	while (*str != '\0')
+//	{
+//		if (*str == ch)
+//			return str;
+//		str--;
+//	}
+//	return 0;
+//}
+//int main()
+//{
+//	int ch = 0;
+//	char arr[] = "abc  dab cdfgh";
+//	int len = strlen(arr);
+//	printf("请输入要查的字符");
+//	scanf_s("%c", &ch);
+//	printf("%s\n", my_strrchr(arr, ch, len));
+//	system("pause");
+//	return 0;
+//}
