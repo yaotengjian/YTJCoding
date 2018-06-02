@@ -1,0 +1,85 @@
+#include<iostream>
+using namespace std;
+
+////基础引用
+// void TestReference1()
+//{
+//	int a = 1;
+//	int& b = a;
+//
+//	cout << "a:address->" << &a << endl;
+//	cout << "b:address->" << &b << endl;
+//
+//	a = 2;
+//	b = 3;
+//	int& c = b;// 引用一个引用变量，别名的别名  
+//	c = 4;
+//}
+//
+//
+//
+// //const引用
+// void TestReference2()
+// {
+//	 int d1 = 4;
+//	 const int & d2 = d1;
+//	 d1 = 5;//d1改变，d2的值也会改变。  
+//			//d2 = 6;//不能给常量（不能被修改的量）赋值。  
+//
+//	 const int d3 = 1;
+//	 const int & d4 = d3;
+//	 //int&d5 = d3;  
+//	 const int & d6 = 5;//常量具有常性，只有常引用可以引用常量  
+//
+//	 double d7 = 1.1;
+//	 //int& d8 = d7;//d7是double类型，d8是int，d7赋值给 d8时要生成一个临时变量  
+//	 //也就是说d8引用的是这个带有常性的临时变量，所以不能赋值。  
+//	 const int& d9 = d7;
+// }
+//
+//
+//
+//
+// //值传递
+// void Swap(int left, int right) 
+// //传参时对于参数left和right拷贝一临时副本,变量销毁并不会影响外部left和right的值.
+// {  
+//	int temp = left;
+// left = right;
+// right = temp;
+//  }
+//
+//
+//
+//
+////引用传递
+////使用引用的话，不做临时拷贝，&的使用说明此处只是原参数的另一个名字而已，所以修改时直接在原参数的基础上修改变量值.
+//void Swap(int& left, int& right)
+//{
+//	int temp = left;
+//	right = left;
+//	left = temp;
+//}
+//
+//
+//
+//
+////指针传递
+////传入的是地址，因为地址是唯一的，所以指针通过地址的访问进而可修改其内容.
+//void Swap(int* pLeft, int* pRight)  
+//{
+//	int temp = *pLeft;
+//	*pLeft = *pRight;
+//	*pRight = temp;
+//}
+
+
+
+
+
+
+
+
+
+
+
