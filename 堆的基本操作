@@ -1,0 +1,257 @@
+#pragma once
+
+#include<stdio.h>
+#include<malloc.h>
+#include<assert.h>
+#include<string.h>
+
+typedef  int DataType;
+typedef struct Heap
+{
+	DataType* _array;
+	int _capacity;
+	int _size;
+
+}Heap;
+
+void swap(DataType* pleft, DataType* pright)
+{
+	DataType tmp;
+	assert(pleft);
+	assert(pright);
+	tmp = *pleft;
+	*pleft = *pright;
+	*pright = tmp;
+}
+
+void _AdjusDown(Heap* hp, int parent)
+{
+	//child标记parent节点左右子树的最小的孩子
+	//
+	int child = parent * 2 + 1;
+	while (child < hp->_size)
+	{
+		//找左右孩子中的最小的孩子
+		if (child + 1<hp->_size&&hp->_array[child] > hp->_array[child + 1])
+		{
+			child += 1;
+		}
+		//用双亲和最小的孩子比较
+		if (hp->_array[parent] > hp->_array[child])
+		{
+			swap(&hp->_array[parent], &hp->_array[child]);
+			parent = child;
+			child = parent * 2 + 1;
+		}
+
+	}
+}
+void _Adjusup(Heap* hp, int  child)
+{
+
+	int parent = ((child - 1) >> 1);
+	while (child)
+	{
+		if (hp->_array[parent] > hp->_array[child])
+		{
+			swap(&hp->_array[parent], &hp->_array[child]);
+			child = parent;
+			parent = ((child - 1) >> 1);
+		}
+		else
+			return;
+	}
+}
+int _CheckCapacity(Heap* hp)
+{
+	assert(hp);
+	if (hp->_size == hp->_capacity)
+	{
+		//申请新空间
+		int newCapacity = hp->_capacity * 2;
+		DataType* pTmp = (DataType*)malloc(sizeof(DataType)*newCapacity);
+		if (NULL == pTmp)
+		{
+			assert(0);
+			assert(0);
+		}
+		//拷贝元素
+		for (int i = 0; i < hp->_size; ++i)
+		{
+			pTmp[i] = hp->_array[i];
+		}
+
+		//释放旧空间
+		free(hp->_array);
+		hp->_array = pTmp;
+		hp->_capacity = newCapacity;
+
+	}
+	return 1;
+}
+
+
+void CreateHeap(Heap* hp, DataType* array, int size)
+{
+	int i = 0;
+	int root = ((size - 2) >> 1);
+	//给堆申请空间
+	hp->_array = (DataType*)malloc(sizeof(DataType)*size);
+	if (NULL == hp->_array)
+	{
+		assert(0);
+			return;
+	}
+	hp->_capacity = size;
+	//放置元素
+
+	for (int i = 0; i < size; ++i)
+	{
+		hp->_array[i] = array[i];
+		hp->_size = size;
+	}
+	//调整
+	for (; root >= 0; --root)
+	{
+		_AdjusDown(hp, root);
+	}
+}
+
+//插入元素
+void InsertHeap(Heap* hp, DataType data)
+{
+	assert(hp);
+	//检测容量
+	_CheckCapacity(hp);
+
+	
+	//插入元素：将待插入元素放置最后一个元素之后
+	hp->_array[hp->_size++] = data;
+	//堆调整
+	_Adjusup(hp, hp->_size - 1);
+
+}
+
+
+int EmptyHeap(Heap* hp)
+{
+	assert(hp);
+	return 0 == hp->_size;
+}
+
+void DeleteHeap(Heap* hp)
+{
+	if (EmptyHeap(hp))
+		return;
+	swap(&hp->_array[0], &hp->_array[hp->_size - 1]);
+	hp->_size = 1;
+	_AdjusDown(hp, 0);
+
+}
+
+DataType TopHeap(Heap* hp)
+{
+	assert(hp);
+	return hp->_array[0];
+}
+
+
+
+
+
+int sizeHeap(Heap* hp)
+{
+	assert(hp);
+	return hp->_size;
+}
+
+
+
+void DestroyHeap(Heap* hp)
+{
+	assert(hp);
+	if (hp->_array)
+	{
+		free(hp->_array);
+		hp->_capacity = 0;
+		hp->_size = 0;
+	}
+}
+
+//堆排序
+//升序--大堆
+void HeapAdjust(int* array, int size,int parent)
+{
+	int child = parent * 2 + 1;
+	assert(array);
+	while (child < size)
+	{
+		//找最大的孩子
+		if (child + 1 < size&&array[child] < array[child + 1])
+			child += 1;
+		if (array[parent] < array[child])
+		{
+			swap(&array[parent], &array[child]);
+			parent = child;
+			child = parent * 2 + 1;
+		}
+		else
+			return;
+	}
+
+
+}
+void HeapSort(int* array, int size)
+{
+	int end = size - 1;
+	//1、建堆
+	int root = ((size - 2) >> 1);
+		for(; root >= 0; --root)
+		{
+			HeapAdjust(array, size, root);
+		}
+	//2、排序
+		while(end)
+		{
+			swap(&array[0], &array[end]);
+			HeapAdjust(array, end, 0);
+			--end;
+		}
+}
+
+//测试
+void TestHeapSort()
+{
+	int arr[] = { 53,17,9,45,65,87,23,31 };
+	int sz = sizeof(arr) / sizeof(arr[0]);
+	HeapSort(arr, sz );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void TestHeap()
+{
+	int arr[] = { 53,17,9,45,65,87,23,31 };
+	Heap hp;
+	CreateHeap(&hp, arr, sizeof(arr) / sizeof(arr[0]));
+	InsertHeap(&hp, 5);
+	printf("size = %d\n", sizeHeap(&hp));
+	printf("top = %d\n", TopHeap(&hp));
+
+	DeleteHeap(&hp);
+	printf("size = %d\n", sizeHeap(&hp));
+	printf("top = %d\n", TopHeap(&hp));
+} 
