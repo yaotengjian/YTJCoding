@@ -1,0 +1,18 @@
+//求连续子数组的最大和
+int FindGreatestSumOfSubArray(vector<int> array)
+{
+	if (array.size() == 0)
+		return -1;
+	int sum = array[0];
+	int max = array[0];
+	for (size_t size = 1; size < array.size(); ++size)
+	{
+		if (sum <= 0)
+			sum = array[size];
+		else
+			sum += array[size];
+		if (sum > max)
+			max = sum;
+	}
+	return max;
+}
