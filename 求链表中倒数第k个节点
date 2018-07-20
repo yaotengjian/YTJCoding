@@ -1,0 +1,23 @@
+
+//定义两个指针，第一个指针从头开始向前走k个节点，第二个指针开始保持不动，第一个指针走完k个后，
+//第二个指针从链表头部开始，当第一个指针到达最后的null时，第二个指针刚好是倒数第k个节点。
+ListNode *FindKthTail(ListNode *pHead, size_t K)
+{
+	if (NULL == pHead || K == 0)
+		return NULL;
+	ListNode *fast = pHead;
+	ListNode *slow = pHead;
+	for (size_t i = 0; i < K; i++)
+	{
+		if (fast)//防止k大于链表节点的个数
+			fast = fast->_next;
+		else
+			return NULL;
+	}
+	while (fast)
+	{
+		fast = fast->_next;
+		slow = slow->_next;
+	}
+	return slow;
+}
