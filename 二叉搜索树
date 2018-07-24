@@ -1,0 +1,269 @@
+#pragma once
+#include<stdio.h>
+#include<assert.h>
+#include<string.h>
+#include<malloc.h>
+
+typedef int DataType;
+
+typedef struct BSTreeNode
+{
+	struct BSTreeNode* _pLeft;
+	struct BSTreeNode* _pRight;
+	DataType _data;
+
+}BSTNode;
+
+BSTNode*  BuyBSTreeNode(DataType data)
+{
+	BSTNode* pNewNode = (BSTNode*)malloc(sizeof(BSTNode));
+	if (NULL == pNewNode)
+	{
+		assert(0);
+		return NULL;
+	}
+	pNewNode->_data = data;
+	pNewNode->_pLeft = NULL;
+	pNewNode->_pRight = NULL;
+
+	return pNewNode;
+}
+
+void BSTreeInit(BSTNode** pRoot)
+{
+	assert(pRoot);
+	*pRoot = NULL;
+}
+void BSTreeInsert(BSTNode** pRoot, DataType data)
+{
+	BSTNode* pCur = NULL;
+	BSTNode* pParent = NULL;
+
+	assert(pRoot);
+	if (*pRoot == NULL)
+	{
+		*pRoot = BuyBSTreeNode(data);
+		return;
+	}
+	//1、找待插入节点的插入位置
+	pCur = *pRoot;
+	while (pCur)
+	{
+		if (data < pCur->_data)
+		{
+			pParent = pCur;
+			pCur = pCur->_pLeft;
+		}
+		else if(data > pCur->_data)
+		{
+			pParent = pCur;
+			pCur = pCur->_pRight;
+		}
+		else
+			return;
+		//插入节点
+		pCur = BuyBSTreeNode(data);
+		if (data < pParent->_data)
+			pParent->_pLeft = pCur;
+		else
+			pParent->_pRight = pCur;
+
+	}
+
+
+}
+BSTNode* BSTreeFind(BSTNode* pRoot, DataType data)
+{
+	BSTNode* pCur = pRoot;
+	while (pCur)
+	{
+		if (pCur)
+		{
+			if (data == pCur->_data)
+				return pCur;
+			else if(data < pCur->_data)
+				pCur = pCur->_pLeft;
+			else
+				pCur = pCur->_pRight;
+		}
+	}
+	return NULL;
+}
+
+void InOrder(BSTNode* pRoot)
+{
+	if (pRoot)
+	{
+		InOrder(pRoot->_pLeft);
+		printf("%d", pRoot->_data);
+		InOrder(pRoot->_pRight);
+	}
+}
+void BSTreeDestroy(BSTNode** pRoot)
+{
+	assert(pRoot);
+	if (*pRoot)
+	{
+		BSTreeDestroy(&(*pRoot)->_pLeft);
+		BSTreeDestroy(&(*pRoot)->_pRight);
+		free(*pRoot);
+		*pRoot = NULL;
+
+	}
+
+}
+
+//删除
+//1、左右孩子都为空，直接删除
+//2、只有左孩子
+//3、只有右孩子
+//4、都存在：
+//找替代节点-> 左子树 最大，右子树 最小-将替代节点中的数据交给待删除节点。
+void BSTReeDelete(BSTNode** pRoot, DataType data)
+{
+	BSTNode* pCur = NULL;
+	BSTNode* pParent = NULL;
+	assert(pRoot);
+	//1、找待删节点在二叉树的位置
+	while (pCur)
+	{
+		if (data == pCur->_data)
+			break;
+		else if (data < pCur->_data)
+		{
+			pParent = pCur;
+		pCur = pCur->_pLeft;
+	     }
+		else
+		{
+			pParent = pCur;
+			pCur = pCur->_pRight;
+		}
+	}
+	if (NULL == pCur)
+		return;
+	//只有右孩子||叶子
+	if (NULL == pCur->_pLeft)
+	{
+		if (pCur == *pRoot)
+		{
+			*pRoot = pCur->_pRight;
+		}
+		else
+		{
+			//检测待删除节点是其双亲的左或者右
+			if (pParent->_pLeft = pCur)
+				pParent->_pLeft = pCur->_pRight;
+			else//检测待删除的节点是其双亲的右
+				pParent->_pRight = pCur->_pRight;
+		}
+		
+	}
+	else if (NULL == pCur->_pRight)//只有左孩子
+	{
+		if (pCur == *pRoot)
+			*pRoot = pCur->_pLeft;
+		else
+		{
+			if (pParent->_pLeft == pCur)
+				pParent->_pLeft = pCur->_pLeft;
+			else
+				pParent->_pRight = pCur->_pLeft;
+		}
+	}
+	else
+	{
+		//左右孩子均存在
+		//在左右子树中找最左侧的节点
+		BSTNode* pDel = pCur->_pRight;
+		while (pDel)
+		{
+			pParent = pDel;
+			pDel = pDel->_pLeft;
+		}
+		pCur->_data = pDel->_data;
+		if (pDel == pParent->_pLeft)
+			pParent->_pLeft = pDel->_pRight;
+		else
+			pParent->_pRight = pDel->_pRight;
+		pCur = pDel;
+	}
+
+	free(pCur);
+}
+
+BSTNode* BSTreeFind(BSTNode* pRoot, DataType data)
+{
+	if (NULL == pRoot)
+		return NULL;
+	else
+	{
+		if (data == pRoot->_data)
+			return pRoot;
+		else if (data < pRoot->_data)
+			return BSTreeFind(pRoot->_pLeft, data);
+		else
+			return BSTreeFind(pRoot->_pRight, data);
+	}
+
+}
+void BSTreeInsert(BSTNode** pRoot, DataType data)
+{
+	assert(pRoot);
+	if (NULL == *pRoot)
+		*pRoot = BuyBSTreeNode(data);
+	else
+	{
+		if (data < (*pRoot)->_data)
+			BSTreeInsert(&(*pRoot)->_pLeft, data);
+		else if (data>(*pRoot)->_data)
+		{
+			BSTreeInsert(&(*pRoot)->_pRight, data);
+		}
+		else
+			return;
+		}
+}
+
+void BSTreeDelete(BSTNode** pRoot, DataType data)
+{
+	assert(pRoot);
+	if (NULL == *pRoot)
+		return;
+	else
+	{
+		if (data < (*pRoot)->_data)
+			BSTreeDelete(&(*pRoot)->_pLeft, data);
+		else if (data>(*pRoot)->_data)
+			BSTreeDelete(&(*pRoot)->_pRight, data);
+		else
+		{//只有左孩子 || 叶子节点
+			BSTNode* pDel = *pRoot;
+			if (NULL == (*pRoot)->_pLeft)
+			{
+				*pRoot = pDel->_pRight;
+				free(pDel);
+			}
+			else if (NULL == pDel->_pRight)
+			{
+				*pRoot = pDel->_pLeft;
+			}
+
+			else
+			{
+				pDel = (*pRoot)->_pRight;
+				while (pDel->_pLeft)
+				{
+					pDel = pDel->_pLeft;
+					(*pRoot)->_data = pDel->_data;
+					BSTreeDelete(&(*pRoot)->_pRight, pDel->_data);
+				}
+			}
+		}
+	}
+
+
+
+}
+
+
