@@ -1,0 +1,36 @@
+////在字符串中找出第一个只出现一次的字符,输入“abaccdeff”，则输出'b'
+#include<stdio.h>
+#include<string.h>
+#include<assert.h>
+#include<stdlib.h>	
+#include<memory.h>
+	char firstSingle(char *str)
+	{
+		int arr[256];
+	char *pt = str;
+	if (*pt == '\0')
+	{
+		return '\0';
+	}
+	memset(arr, 0, sizeof(arr));
+while ('\0' != *pt)
+	{
+		arr[*pt++]++;
+	}
+	while ('\0' != *str)
+	{
+		if (arr[*str] == 1)
+		{
+			return *str;
+		}
+		str++;
+	}
+	return '\0';
+}
+   int main()
+{
+	char *str = "abcczddefba";
+	printf("%c\n", firstSingle(str));
+	system("pause");
+	return  0;
+}
