@@ -1,0 +1,33 @@
+void quick_sort(int num[], int left, int right)
+{
+	if (left < right)
+	{
+		int i = left;// i从左往右
+		int j = right;//j从右往左
+		int x = num[i];//把第一个数当轴值，保存到x中
+		while (i < j)
+		{
+			while (i < j && num[j] >= x)//如果右边的值比轴大就循环
+			{
+				j--;
+			}
+			if (i < j)
+			{
+				num[i++] = num[j];
+			}
+
+			while (i < j && num[i] < x)//如果左边的值比轴小就循环
+			{
+				i++;
+			}
+			if (i < j)
+			{
+				num[j--] = num[i];
+			}
+		}
+		num[i] = x;//最后ij所在的值就是轴值所在的值tmp
+
+		quick_sort(num, left, i - 1);
+		quick_sort(num, i + 1, right);
+	}
+}
