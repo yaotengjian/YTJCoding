@@ -27,7 +27,6 @@ PSHLNode BuySHListNode(DataType data)
 
 }
 
-
 //什么时候该用二级指针？ 
 //初始化
 void SHListInit(PSHLNode* pHead)
