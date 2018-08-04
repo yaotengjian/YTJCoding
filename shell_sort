@@ -1,0 +1,36 @@
+
+//希尔排序
+void Shell_sort(int array[], int size)
+{
+	int i, j, key;
+	int g;
+	int gap = 3 + 1;
+	//当gap == 1 的时候，就是插入排序
+	while (gap > 1)
+	{
+		gap = gap / 3;
+	}
+	for (g = 0; g < gap; g++)//表示当前排序在哪一组
+	{
+		//这里基本和插入排序相同
+		for (i = g + gap; i < size; i += gap)
+		{
+			key = array[i];
+			for (j = i - gap; j >= 0; j -= gap)
+			{
+				if (array[j] <= key)
+				{
+					break;
+				}
+				else
+				{
+					array[j + gap] = array[j];
+				}
+			}
+			array[j + gap] = key;
+		}
+	}
+	//进行插入排序
+	//Insert_sort(array, size);
+}
+//不稳定，最好0(n),最坏o(n^2),空间o(1)
