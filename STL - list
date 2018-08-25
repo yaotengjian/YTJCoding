@@ -1,0 +1,182 @@
+//
+////list的简单应用
+////list是一个双向链表，可以高效的进行插入删除元素。
+//int main()
+//{
+//	list<int>a{ 1,2,3,4};
+//	list<int>::iterator it;
+//	//a.begin() 返回指向第一个元素的迭代器
+//	//a.end()  返回指向最后一个元素的迭代器
+//	for (it = a.begin(); it != a.end(); it++) {
+//		cout << *it << "\t";	
+//	}
+//	system("pause");
+//	return 0;
+//}
+//
+////c.rbegin()    返回逆向链表的第一个元素,即c链表的最后一个数据。
+////c.rend()      返回逆向链表的最后一个元素的下一个位置, 即c链表的第一个数据再往前的位置。
+//int main()
+//{
+//	list<int>a{ 1,2,3,4,5 };
+//	list<int>::reverse_iterator it;
+//	for (it = a.rbegin(); it != a.rend(); it++)
+//		cout << *it << "\t";
+//	system("pause");
+//	return 0;
+//}
+//
+//
+//int main()
+//{
+//	///operator=  重载赋值运算符
+//	list<int>a1{ 1,2,3,4,5 }, a2;
+//	a2 = a1;
+//	list<int>::iterator it;
+//	for (it = a2.begin(); it != a2.end(); it++)
+//	{
+//		cout << *it << endl;
+//	}
+//
+////c.assign(n,num) 将n个num拷贝给链表c
+////c.assign(beg,end) 将[beg,end]区间的元素拷贝赋值给链表c
+//	int a[5] = { 1,2,3,4,5 };
+//	list<int> a1;
+//	list<int>::iterator it;
+//	a1.assign(2, 10);
+//	for (it = a1.begin(); it != a1.end(); it++)
+//	{
+//		cout << *it << " ";
+//	}
+//	cout << endl;
+//	a1.assign(a, a + 5);
+//	for (it = a1.begin(); it != a1.end(); it++)
+//	{
+//		cout << *it << " ";
+//	}
+//	cout << endl;
+//
+////c.front()  返回链表的第一个元素
+////c.back()   返回链表的最后一个元素
+//	
+//	list<int> a1{ 1,2,3,4,5 };
+//	if (!a1.empty())
+//	{
+//		cout << "first:" << a1.front() << endl;
+//		cout << "last:" << a1.back() << endl;
+//
+//	}
+//
+////c.empty() 判断链表是否为空
+////c.size()  返回链表中实际的个数
+////c.clear() 清除链表c中的所有元素
+//
+//
+////c.insert(pos,num)   在pos位置插入元素num
+////c.insert(pos,n,num)  在pos位置插入n个元素num
+////c.insert(pos,beg,end) 在pos位置插入区间为[beg,end]的元素
+//
+//	list<int> a1{ 1,2,3,4,5 };
+//	list<int>::iterator it;
+//	cout << "insert before:";
+//	for (it = a1.begin(); it != a1.end(); ++it)
+//	{
+//		cout << *it << " ";
+//	}
+//	cout << endl;
+//	//
+//	a1.insert(a1.begin(), 0);
+//	cout << "insert after:";
+//	for (it = a1.begin(); it != a1.end(); ++it)
+//	{
+//		cout << *it << " ";
+//	}
+//	cout << endl;
+//	//
+//	a1.insert(a1.begin(), 3, 1);
+//	cout << "insert after:";
+//	for (it = a1.begin(); it != a1.end(); ++it)
+//	{
+//		cout << *it << " ";
+//	}
+//	cout << endl;
+//	//
+//	int arr[] = { 88,66,99,55,77 };
+//	a1.insert(a1.begin(), arr, arr + 3);
+//	cout << "insert after:";
+//	for (it = a1.begin(); it != a1.end(); ++it)
+//	{
+//		cout << *it << " ";
+//	}
+//	cout << endl;
+//
+////c.erase(pos)  删除pos位置上的元素
+//	list<int> a1{ 1,2,3,4,5 };
+//	list<int>::iterator it;
+//	cout << "erase before:";
+//	for (it = a1.begin(); it != a1.end(); ++it)
+//	{
+//		cout << *it << " ";
+//	}
+//	a1.erase(a1.begin());
+//	cout << "erase after:";
+//	for (it = a1.begin(); it != a1.end(); ++it)
+//	{
+//		cout << *it << " ";
+//	}
+//	cout << endl;
+//
+////c.push_back(num)       在末尾增加一个元素。
+////c.pop_back()           删除末尾的元素。
+////c.push_front(num)      在开始位置增加一个元素。
+////c.pop_front()          删除第一个元素。
+//
+//list<int> a1{ 1,2,3,4,5 };
+//a1.push_back(10);
+//list<int>::iterator it;
+//for (it = a1.begin(); it != a1.end(); ++it)
+//{
+//	cout << *it << " ";
+//}
+//
+////resize(n)      从新定义链表的长度,超出原始长度部分用0代替,小于原始部分删除。
+////resize(n, num) 从新定义链表的长度, 超出原始长度部分用num代替。
+////c1.swap(c2);      将c1和c2交换。
+////c1.merge(c2)      合并2个有序的链表并使之有序,从新放到c1里,释放c2。
+////c1.merge(c2, comp)合并2个有序的链表并使之按照自定义规则排序之后从新放到c1中, 释放c2。
+////
+//	list<int> a1{ 1,2,3 }, a2{ 4,5,6 };
+//	a1.merge(a2);
+//	list<int>::iterator it;
+//	cout << "a1.merge(a2):";
+//for (it = a1.begin(); it != a1.end(); it++) {
+//		cout << *it << " ";
+//}
+//cout << endl;
+////
+//a2.merge(a1, [](int n1, int n2) {return n1>n2; });
+//	cout << "a2.merge(a1,comp):";
+//for (it = a2.begin(); it != a2.end(); it++) {
+//		cout << *it << " ";
+//}
+//	cout << endl;
+//
+////reverse()  反转链表
+//
+//	list<int> a1{ 1,2,3,4,5 };
+//	a1.reverse();
+//	list<int>::iterator it;
+//	for (it = a1.begin(); it != a1.end(); ++it)
+//	{
+//		cout << *it << " ";
+//	}
+//
+//
+////unique() 删除相邻的元素
+////c.sort()       将链表排序，默认升序
+////c.sort(comp)   自定义回调函数实现自定义排序
+////
+//	system("pause");
+//	return 0;
+//}
+//
