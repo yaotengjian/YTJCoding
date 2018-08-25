@@ -1,0 +1,283 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include <typeinfo>
+#include<map>
+#include <algorithm>
+#include<list>
+#include<stack>
+#include<deque>
+#include<set>
+using namespace std;
+//
+//vector的简单应用
+//容器，存放任意类型的动态数组，能够增加和压缩数据
+//int main()
+//{
+//	vector<int> v;//声明一个存储int型数据的容器v
+//	vector < vector<int>> vv;//声明一个二维的vector，C++11标准写法
+//	return 0;
+//}
+////vector的初始化
+//int main()
+//{
+//	vector<int> va;
+//	for (int i = 0; i < 5; i++)
+//		va.push_back(i);//把五个元素放进去
+//
+//	vector<int> vb(va);//用va初始化vb，要求同一容器，类型相同
+//	vector<int> vc{ 1,2,3,4 };//初始化列表（c++11）
+//	vector<int> vd = { 1,2,3,4 };
+//	vector<int> ve(va.begin(), va.end());//迭代器指定范围初始化
+//	return 0;
+//}
+//
+////c.push_back(elem) 在尾部插入一个elem数据
+//  vector<int> v;
+// v.push_back(1);
+//
+////.pop_back()删除末尾的数据
+////c.assign (n,elem)将n个elem的拷贝赋值给c。
+//vector<int> v;
+//v.assign(5, 6);//往v里放5个6
+//
+//// c.clear()移除容器中的所有数据。
+//// c.empty()判断容器是否为空。
+//// c.erase(pos)删除pos位置的数据,传回下一个数据的位置
+//// c.erase(beg,end)删除[beg,end)区间的数据，传回下一个数据的位置
+//
+//
+////利用拷贝构造函数和swap函数可以实现赋值操作
+//int main()
+//{
+//	vector<int> va, vb, vc;
+//	va = { 1,2,3,4 };
+//	for (int i = 0; i < 10; i++)
+//	{
+//		vb.push_back(i);
+//	}
+//	va = vb;//vb拷贝给va
+//	swap(va, vc);
+//	for (auto x : vc)//输出应该是va里面的值
+//		cout <<x << "";
+//	for (auto x : va)//va为空
+//		cout <<x << "";
+//	cout << endl;
+//	va.swap(vc);//再把vc和va的值换回来
+//	for (auto x : vc)
+//		cout <<  x << "";//里面为空
+//	for (auto x : va)
+//		cout <<  x << "";
+//	system("pause");
+//	return 0;
+//}
+//
+////vector传统遍历（下标，迭代器）
+//int main()
+//{
+//	ios::sync_with_stdio(false);
+//	vector<vector<int>> vvb(4, { 1,2,3,4 });
+//	for (int i = 0; i != vvb.size(); i++)
+//	{
+//		for (int j = 0; j != vvb[i].size(); j++)
+//			cout << vvb[i][j] << " ";
+//		cout << endl;
+//	}
+//	for (auto bit = vvb.begin(); bit != vvb.end(); bit++)
+//	{
+//		for (auto bbit = bit->begin(); bbit != bit->end(); bbit++)//bit类似指向一个vvb[i]，里面是向量中的元素
+//			cout << *bbit << " ";
+//		cout << endl;
+//	}
+//	system("pause");
+//	return 0;
+//}
+//
+////C++11中vector遍历：
+//int main()
+//{
+//	vector<vector<int>> vvb(4, { 1,2,3,4 });
+//	for (auto x : vvb)
+//	{
+//		for (auto xx : x)
+//			cout << xx << ""<<endl;
+//	}
+//	cout << endl;
+//	system("pause");
+//	return 0;
+//}
+//
+////auto关键字
+////在拥有初始化表达式的复杂类型变量声明时的简化
+//void TestAuto()
+//{
+//	std::vector<int> v{ 1,2,3,4,5,6,7,8,9 };
+//	std::vector<int>::iterator it = v.begin();
+//	while (it != v.end())
+//		cout << *it++ << " ";
+//	cout << endl;
+//	for (auto it = v.begin(); it != v.end(); ++it)
+//		cout << *it << " ";
+//	cout << endl;
+//}
+//int main()
+//{
+//	TestAuto();
+//	system("pause");
+//	return 0;
+//}
+//
+////免除程序员在一些类型声明时的麻烦，或者避免一些在类型声明时的错误
+//int main()
+//{
+//	const float p = 3.14f;
+//	double r = 2.0;
+//	auto c = 2 * p * r;
+//	cout << c << endl;
+//	cout << typeid(c).name() << endl;
+//	system("pause");
+//	return 0;
+//}
+//
+////auto的自适应性能够在一定程度上支持泛型编程
+//template<class T1, class T2>
+//double Add(const T1& left, const T2& right)
+//{
+//	auto ret = left + right;
+//	cout << typeid(ret).name() << endl;
+//	return ret;
+//}
+//int main()
+//{
+//	auto a = Add(1, 2);
+//	auto b = Add(1.0f, 2.0f);
+//	system("pause");
+//	return 0;
+//}
+//
+////auto和指针一起使用的时候
+//int main()
+//{
+//	int x = 10;
+//	auto a = &x;
+//	auto* b = &x;
+//	auto& c = x;
+//	//auto声明为某一个变量的引用，必须加&
+//	cout << typeid(a).name() << endl;
+//	cout << typeid(b).name() << endl;
+//	cout << typeid(c).name() << endl;
+//	*a = 20;
+//	*b = 30;
+//	c = 40;
+//	system("pause");
+//	return 0;
+//}
+//
+////auto不能推倒的场景：
+//
+////decltype关键字
+//
+//struct
+//{
+//	int _x;
+//	int _y;
+//}pt;
+//int main()
+//{
+//	decltype(pt) p;
+//	cout << typeid(p).name() << endl;
+//	cout << offsetof(decltype(pt), _y) << endl;
+//	system("pause");
+//	return 0;
+//}
+//
+//void* GetMemory(size_t size)
+//{
+//	return malloc(size);
+//}
+//int main()
+//{
+//	//  如果没有带参数，推导函数的类型
+//	cout << typeid(decltype(GetMemory)).name() << endl;
+//	//  如果带参数列表，推导的是函数返回值的类型
+//	cout << typeid(decltype(GetMemory(0))).name() <<endl;
+//	system("pause");
+//		return 0;
+//}
+//
+////auto和decltype配合使用：
+//
+//template <class T, class U>
+//auto add(T t, U u) ->decltype(t + u)
+//{
+//	return t + u;
+//}
+//int main()
+//{
+//	auto r = add(1, 1.0);
+//	cout << typeid(r).name() << endl;
+//	system("pause");
+//	return 0;
+//}
+//
+//////基于范围的for循环
+////普通方法遍历数组
+//int main()
+//{
+//		int array[] = { 1, 2, 3, 4, 5 };
+//		for (int i = 0; i < sizeof(array) / sizeof(array[0]); ++i)
+//			array[i] *= 3;
+//		for (int* p = array; p < array + sizeof(array)/ sizeof(array[0]); ++p)
+//			cout << *p << endl;
+//	system("pause");
+//	return 0;
+//}
+//
+//
+/////STL标准库中的for_each算法：
+//void action1(int& data)
+//{
+//	data *= 2;
+//}
+//void action2(const int& data)
+//{
+//	cout << data << " ";
+//}
+//int main()
+//{
+//	int array[] = { 1, 2, 3, 4, 5 };
+//	for_each(array, array + sizeof(array) / sizeof(array[0]), action1);
+//	for_each(array, array + sizeof(array) / sizeof(array[0]), action2);
+//	system("pause");
+//	return 0;
+//}
+//
+////C++11中的基于范围的for循环
+//int main()
+//{
+//	int array[] = { 1,2,3,4,5 };
+//	for (auto& e : array)
+//		e *= 2;
+//	for (auto e : array)
+//		cout << e << " ";
+//	system("pause");
+//	return 0;
+//}
+//
+////for循环的范围是确定的
+////迭代的对象要实现++和==操作符
+//int main()
+//{
+//	vector<int> v{ 1, 2, 3, 4, 5 };
+//	for (auto it = v.begin(); it != v.end(); ++it)
+//		cout << *it << " "; // it 为迭代器类型
+//	cout << endl;
+//	for (auto e : v)
+//		cout << e << " "; // e 为解引用后的对象
+//	cout << endl;
+//	system("pause");
+//	return 0;
+//}
+////vector和list区别？
+////vector能高效的进行随机存储，list能高效的进行随机插入删除，list的内存空间是不连续的
+//
