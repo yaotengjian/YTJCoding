@@ -1,0 +1,209 @@
+// socket_client1.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+
+
+#include <WinSock2.h> //windows socket的头文件
+#include <Windows.h>
+#include <iostream>
+#include <thread>
+#include <process.h>
+
+#pragma comment(lib, "ws2_32.lib") //连接winsock2.h的静态库文件
+using namespace std;
+
+int main()
+{
+	//加载winsock库
+	WSADATA wsadata;
+	WSAStartup(MAKEWORD(2, 3), &wsadata);
+	//客户端socket
+	SOCKET clientsock = socket(PF_INET, SOCK_STREAM, 0);
+	//初始化socket信息
+	sockaddr_in clientAddr;
+	memset(&clientAddr, 0, sizeof(SOCKADDR));
+	clientAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	clientAddr.sin_family = PF_INET;
+	clientAddr.sin_port = htons(2019);
+	//建立连接
+	connect(clientsock, (SOCKADDR*)&clientAddr, sizeof(SOCKADDR));
+	cout << "已建立连接!" << endl;
+
+	char Buffer[MAXBYTE] = { 0 };    //文件缓冲区
+	char wb_file[100] = { 0 };       //写入的文件
+	char send_file[100] = { 0 };     //需要传输的文件
+
+	cout << "请输入要传输的文件名：" << endl;
+	cin >> send_file;
+	cout << "请输入要写入到文件：" << endl;
+	cin >> wb_file;
+	send(clientsock, send_file, strlen(send_file), 0);
+
+	//cout << wb_file<< endl;
+	FILE *fp = fopen(wb_file, "wb");
+	if (fp == NULL)
+	{
+		cout << "操作文件时出错" << endl;
+		system("pause");
+	}
+	else
+	{
+		memset(&Buffer, 0, MAXBYTE);
+		int size = 0;
+		//当成功接收到文件时（size>0），判断写入的文件长度是否等于接收文件的长度
+		cout << "接收的文件内容：" << endl;
+		while ((size = recv(clientsock, Buffer, MAXBYTE, 0)) > 0)
+		{
+			printf("%s",Buffer);
+			if (fwrite(Buffer, sizeof(char), size, fp)<size)
+			{
+				cout << "写入出错，部分文件缺失！" << endl;
+			}
+			//清空缓冲区以便下一次接收
+			memset(&Buffer, 0, MAXBYTE);
+			//cout << "nide" << endl;
+		}
+		cout << "接收完成！" << endl;
+		fclose(fp);
+
+	}
+	closesocket(clientsock);
+	WSACleanup();
+	cout << "客户端连接已关闭！" << endl;
+	system("pause");
+	return 0;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//// socket_server1.cpp : 定义控制台应用程序的入口点。
+//#define _CRT_SECURE_NO_WARNINGS 1
+//#ifndef WIN32_LEAN_AND_MEAN
+//#define WIN32_LEAN_AND_MEAN
+//#endif
+
+#include "stdafx.h"
+#include<iostream>
+#include<stdio.h>
+#include<winsock2.h>
+#include<windows.h>
+#include<IPHlpApi.h>
+#include<WS2tcpip.h>//winsock2.0
+#include<string>
+#include<fstream>//文件流
+#include<process.h>
+#include<mutex>//互斥量
+#include<thread>//
+#include <Ws2tcpip.h>
+
+#pragma comment(lib,"Ws2_32.lib")//连接winsock2.h的静态库文件
+using namespace std;
+mutex m;
+
+//定义结构体用来设置
+typedef struct my_file
+{
+	SOCKET clientsocket;//文件内部包含一个SOCKET 用于和客户端进行通信
+	sockaddr_in clientAddr;//用于保护客户端的地址
+	int id; //文件块的序号
+}F;
+
+DWORD WINAPI transmmit(const LPVOID arg)
+{
+//	m.lock();//
+	F *temp = (F*)arg;
+	int file_id = temp->id;//获取文件的序号
+	int port = ntohs(temp->clientAddr.sin_port);//获取客户机的端口号
+	cout << "测试开始，等待客户端发送消息..." << endl;
+
+	char file_name[100] = { 0 };//文件路径
+	cout << "传送给客户端的文件为：";
+	recv(temp->clientsocket, file_name,100, 0);
+	cout << file_name << endl;
+
+	FILE *fp = fopen(file_name, "rb");//文件读取，rb二进制读取
+	if (fp == NULL)
+	{
+		cout << "文件" << file_name << "出错或不存在" << endl;
+	}
+	else
+	{
+		char buffer[MAXBYTE] = { 0 };//文件缓冲区
+		int size = 0;//读取文件袋长度
+		//每次读取完之后清空缓冲区，以便下一个文件读入
+		while ((size = fread(buffer, sizeof(char), MAXBYTE, fp)) > 0)
+		{
+			//cout << "buffer:"<<buffer <<" size =" <<size<<endl;
+			//返回非0值，表示send错误
+			if (send(temp->clientsocket, buffer, size, NULL) < 0)
+			{
+				cout << "传输错误，请检查网络配置!" << endl;
+			}
+			memset(&buffer, 0, MAXBYTE);
+		}
+		cout << temp->id << "线程已成功发送" << file_name << endl;
+		fclose(fp);
+	}
+//	m.unlock();
+	closesocket(temp->clientsocket);
+	return 0;
+}
+
+int main()
+{
+	WSADATA wsaData;
+	//第一个参数是winsocket load的版本号（2.2）
+	WSAStartup(MAKEWORD(2,3), &wsaData);
+	//创建服务器端的socket
+	SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	sockaddr_in servAddr;
+	memset(&servAddr, 0, sizeof(SOCKADDR));//初始化socket地址
+	servAddr.sin_family = PF_INET;
+	servAddr.sin_port = htons(2019);
+	servAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	::bind(serverSocket, (SOCKADDR *)&servAddr, sizeof(SOCKADDR));//绑定
+
+	HANDLE hthread[10];//获取句柄
+	listen(serverSocket, 5);//监听
+	for (int i = 0;i<10;i++)
+	{
+		
+		F* temp = new F;//创建新的传输结构体
+		sockaddr_in clntAddr;
+		int nsize = sizeof(SOCKADDR);
+		cout << "等待连接..." << endl;
+		SOCKET clientsock = accept(serverSocket, (SOCKADDR*)&clntAddr,&nsize);
+		//temp数据成员赋值
+		temp->clientsocket = clientsock;
+		temp->id = i + 1;
+		temp->clientAddr = clntAddr;
+	//通过句柄创建子线程
+		cout << "id = " << temp->id << endl;
+		hthread[i] = CreateThread(NULL, 0, &transmmit, temp, 0, NULL);
+	}
+
+
+	//等待子线程完成
+	WaitForMultipleObjects(10, hthread, TRUE, INFINITE);
+	cout << "错误代码：" << WSAGetLastError() << endl;
+	//关闭socket，释放winsock
+	closesocket(serverSocket);
+	WSACleanup();
+
+	cout << "服务器端已关闭！" << endl;
+	system("pause");
+	return 0;
+
+}
