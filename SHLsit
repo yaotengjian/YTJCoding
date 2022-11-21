@@ -11,7 +11,7 @@ typedef struct SHListNode
 }SHLNode,*PSHLNode;
 
 
-//找新节点
+//找新节点。
 PSHLNode BuySHListNode(DataType data)
 {
 	PSHLNode pNewNode = (PSHLNode)malloc(sizeof(SHLNode));
