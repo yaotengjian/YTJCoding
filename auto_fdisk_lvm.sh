@@ -76,3 +76,4 @@ mount /dev/$vgname/$lvname $partition
 df -h
 }
 start_partition
+
