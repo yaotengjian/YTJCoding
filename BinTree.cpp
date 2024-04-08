@@ -3,7 +3,7 @@
 #include<stdio.h>
 #include<assert.h>
 #include<malloc.h>
-#include<string.h>
+##include<string.h>
 
 
 typedef char BTDataType;
